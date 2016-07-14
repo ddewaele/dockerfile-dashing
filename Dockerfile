@@ -1,12 +1,15 @@
 FROM frvi/ruby
 
-MAINTAINER Fredrik Vihlborg <fredrik.wihlborg@gmail.com>
+MAINTAINER ddewaele <ddewaele@gmail.com>
 
-RUN gem install bundle dashing
+RUN gem install bundle dashing oauth2 gemrat
 RUN mkdir /dashing && \
     dashing new dashing && \
     cd /dashing && \
+    gemrat oauth2 && \
     bundle && \
+    mkdir /dashing/templates && \
+    ln -s /dashing/templates /templates && \
     ln -s /dashing/dashboards /dashboards && \
     ln -s /dashing/jobs /jobs && \
     ln -s /dashing/assets /assets && \
@@ -20,7 +23,7 @@ RUN mkdir /dashing && \
 
 COPY run.sh /
 
-VOLUME ["/dashboards", "/jobs", "/lib-dashing", "/config", "/public", "/widgets", "/assets"]
+VOLUME ["/dashboards", "/jobs", "/lib-dashing", "/config", "/public", "/widgets", "/assets", "/templates"]
 
 ENV PORT 3030
 EXPOSE $PORT
